@@ -116,12 +116,3 @@ Weitere technische Details und die Zuständigkeit der Klassen stehen in [docs/AR
 ## Tests und Prüfungen
 
 Ein automatisierter Testlauf ist derzeit nicht eingerichtet. Eine reine Syntaxprüfung ist mit `python -m py_compile main.py` möglich. Für einen Funktionstest werden beide lokalen Modelle, ein Mikrofon und ein Gemini-API-Schlüssel benötigt; die SSH-Funktionen erfordern zusätzlich einen erreichbaren Pepper-Roboter.
-
-## Aktuelle Grenzen
-
-- `dance` und `sing` geben nur Text zurück. Die Methoden `execute_talk()` und `execute_wave()` im SSH-Dienst sind nicht mit den Intent-Handlern verbunden.
-- Ohne `PEPPER_SSH_HOST` wird keine SSH-Verbindung aufgebaut. Zugangsdaten werden aus `PEPPER_SSH_USERNAME`, `PEPPER_SSH_PASSWORD` oder `PEPPER_SSH_KEY_FILE` gelesen. Der SSH-Dienst akzeptiert derzeit bislang unbekannte Host-Schlüssel.
-- `SSHService.execute_talk()` setzt den Text direkt in einen Shell-Befehl ein. Vor der Übergabe frei formulierter Antworten an Pepper ist eine sichere Übergabe des Texts erforderlich.
-- `GeminiServiceImpl` gibt bei einem Fehler derzeit schon nach dem ersten Versuch `Exception gefangen` zurück. Der vorgesehene Wiederholungsversuch wird dadurch nicht ausgeführt.
-- Die Python-Abhängigkeiten außer `torch` sind nicht auf Versionen festgelegt. Die Installation kann daher mit späteren Paketversionen anders ausfallen. Ein automatisierter End-to-End-Test und eine CI-Konfiguration sind nicht vorhanden.
-- `WhisperServiceImpl` benötigt ein bereits initialisiertes externes Modell; eine passende Whisper-Abhängigkeit ist nicht in `requirements.txt` eingetragen.
