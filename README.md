@@ -4,6 +4,14 @@ Python-Prototyp für eine sprachgesteuerte Interaktion mit dem Roboter Pepper. D
 
 **Projektstand:** Die Hauptanwendung zeigt Transkripte und Antworten im Terminal an. Die Aktionen `dance` und `sing` sind Text-Platzhalter. Ein SSH-Dienst für Pepper ist vorhanden, wird im Hauptablauf aber nicht für Sprachausgabe oder Bewegungen verwendet. Das Projekt ist ein Prototyp, keine fertig integrierte Robotersteuerung.
 
+## Funktionsumfang
+
+- Fortlaufende Aufnahme von Mikrofon-Audio und lokale deutsche Transkription mit Vosk.
+- Aktivierung durch das erkannte Wort `pepper` in einem abgeschlossenen Transkript.
+- Lokale Intent-Auswahl mit Qwen für `dance`, `sing` oder `smalltalk`.
+- Textantworten für Befehle und Gemini-Antworten für Smalltalk oder unbekannte Intents.
+- Optionaler SSH-Dienst mit Methoden für Sprachausgabe und Winken; noch nicht in den Hauptablauf eingebunden.
+
 ## Voraussetzungen
 
 - Python 3.12 und `pip` (die festgelegte Version `torch==2.3.1` bietet Wheels bis Python 3.12; siehe [PyPI](https://pypi.org/project/torch/2.3.1/)).
@@ -12,7 +20,7 @@ Python-Prototyp für eine sprachgesteuerte Interaktion mit dem Roboter Pepper. D
 - Ein Gemini-API-Schlüssel in der Umgebungsvariable `GEMINI_API_KEY` — auch wenn nur lokale Befehle ausprobiert werden, da der Dienst beim Start initialisiert wird.
 - Optional: SSH-Zugang zu einem Pepper-Roboter. Ohne ihn läuft der Hauptablauf mit Konsolenausgabe.
 
-## Einrichtung und Start
+## Schnellstart
 
 Die folgenden Befehle werden im Projektverzeichnis ausgeführt. Beispiel für PowerShell:
 
@@ -82,6 +90,16 @@ Vosk verarbeitet Audio mit 16 kHz in Aufnahmen von 0,5 Sekunden. Der Hauptablauf
 
 Weitere technische Details und die Zuständigkeit der Klassen stehen in [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md).
 
+## Technologien
+
+| Baustein | Verwendung |
+| --- | --- |
+| Python | Hauptanwendung und Dienste |
+| Vosk und `sounddevice` | Lokale Spracherkennung und Mikrofonaufnahme |
+| Qwen2.5-0.5B-Instruct, `transformers` und PyTorch | Lokales Intent-Routing auf der CPU |
+| Google Gemini (`google-genai`) | Generierung von Smalltalk-Antworten |
+| Spur / SSH | Optionale Verbindung zum Pepper-Roboter |
+
 ## Projektstruktur
 
 | Pfad | Aufgabe |
@@ -94,6 +112,10 @@ Weitere technische Details und die Zuständigkeit der Klassen stehen in [docs/AR
 | `services/chatbot/GeminiServiceImpl.py` | Antwortgenerierung über die Gemini-API |
 | `services/sshservice/SSHService.py` | SSH-Verbindung sowie Methoden für Sprechen und Winken |
 | `services/audioprocessor/WhisperServiceImpl.py` | Alternative Transkriptionsklasse; nicht im Hauptablauf eingebunden |
+
+## Tests und Prüfungen
+
+Ein automatisierter Testlauf ist derzeit nicht eingerichtet. Eine reine Syntaxprüfung ist mit `python -m py_compile main.py` möglich. Für einen Funktionstest werden beide lokalen Modelle, ein Mikrofon und ein Gemini-API-Schlüssel benötigt; die SSH-Funktionen erfordern zusätzlich einen erreichbaren Pepper-Roboter.
 
 ## Aktuelle Grenzen
 
